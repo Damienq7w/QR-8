@@ -42,13 +42,17 @@
     .d6 { top: 48%; right: 5%; animation-delay: 2.3s; }
 
     @keyframes flotar {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-16px) rotate(8deg); }
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-16px) rotate(8deg);
+      }
     }
 
     .tarjeta {
       width: 100%;
-      max-width: 900px;
+      max-width: 880px;
       background: rgba(255, 255, 255, 0.96);
       border-radius: 35px;
       padding: 35px 28px;
@@ -173,7 +177,7 @@
       box-shadow: 0 5px 0 #65b8df;
     }
 
-    .ruta {
+    .zona-visual {
       margin: 25px auto;
       background: #f7fbff;
       border: 4px solid #b7e7ff;
@@ -194,46 +198,30 @@
       box-shadow: 0 5px 0 #2f8fc2;
     }
 
-    .casillas {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
-    }
-
-    .casilla {
-      min-height: 70px;
-      background: linear-gradient(135deg, #ffffff, #eaf8ff);
-      border: 3px solid #9bdcff;
-      border-radius: 18px;
+    .estudiantes {
       display: flex;
       justify-content: center;
-      align-items: center;
-      font-size: 18px;
-      font-weight: bold;
-      color: #37627a;
-      position: relative;
-      box-shadow: 0 5px 0 #b7dff2;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 38px;
+      padding: 10px;
     }
 
-    .casilla.inicio {
-      background: linear-gradient(135deg, #fff7d6, #ffe79c);
-      border-color: #ffd15c;
+    .estudiante {
+      animation: saltito 2s ease-in-out infinite;
     }
 
-    .casilla.meta {
-      background: linear-gradient(135deg, #d9ffe0, #90f3a3);
-      border-color: #48d865;
+    .estudiante:nth-child(even) {
+      animation-delay: .4s;
     }
 
-    .bus {
-      position: absolute;
-      font-size: 36px;
-      animation: saltar 0.8s ease infinite alternate;
-    }
-
-    @keyframes saltar {
-      from { transform: translateY(0); }
-      to { transform: translateY(-6px); }
+    @keyframes saltito {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-7px);
+      }
     }
 
     .opciones {
@@ -361,15 +349,6 @@
         font-size: 20px;
       }
 
-      .casillas {
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      .casilla {
-        min-height: 60px;
-        font-size: 15px;
-      }
-
       .opciones {
         grid-template-columns: 1fr;
       }
@@ -381,14 +360,18 @@
       .dato {
         font-size: 17px;
       }
+
+      .estudiantes {
+        font-size: 32px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="decoracion d1">🚌</div>
-  <div class="decoracion d2">🎒</div>
-  <div class="decoracion d3">📚</div>
+  <div class="decoracion d1">🎒</div>
+  <div class="decoracion d2">📚</div>
+  <div class="decoracion d3">✏️</div>
   <div class="decoracion d4">⭐</div>
   <div class="decoracion d5">🎈</div>
   <div class="decoracion d6">✨</div>
@@ -421,9 +404,19 @@
       <div class="dato">¿Total?</div>
     </div>
 
-    <section class="ruta">
-      <div class="letrero">RUTA DEL PASEO</div>
-      <div class="casillas" id="casillas"></div>
+    <section class="zona-visual">
+      <div class="letrero">RETO FINAL DEL PASEO</div>
+
+      <div class="estudiantes">
+        <span class="estudiante">👧</span>
+        <span class="estudiante">👦</span>
+        <span class="estudiante">🎒</span>
+        <span class="estudiante">📚</span>
+        <span class="estudiante">👧</span>
+        <span class="estudiante">👦</span>
+        <span class="estudiante">🎒</span>
+        <span class="estudiante">📚</span>
+      </div>
     </section>
 
     <section class="opciones">
@@ -441,7 +434,6 @@
   </main>
 
   <script>
-    const contenedorCasillas = document.getElementById("casillas");
     const tiempoTexto = document.getElementById("tiempo");
     const temporizador = document.getElementById("temporizador");
     const mensaje = document.getElementById("mensaje");
@@ -450,35 +442,10 @@
 
     const respuestaCorrecta = 300;
     const tiempoInicial = 30;
-    const totalCasillas = 7;
 
     let tiempo = tiempoInicial;
-    let posicionBus = 4;
     let juegoTerminado = false;
     let intervalo;
-
-    function crearRuta() {
-      contenedorCasillas.innerHTML = "";
-
-      for (let i = 1; i <= totalCasillas; i++) {
-        const casilla = document.createElement("div");
-        casilla.classList.add("casilla");
-
-        if (i === 1) casilla.classList.add("inicio");
-        if (i === totalCasillas) casilla.classList.add("meta");
-
-        casilla.textContent = i;
-
-        if (i === posicionBus) {
-          const bus = document.createElement("div");
-          bus.classList.add("bus");
-          bus.textContent = "🚌";
-          casilla.appendChild(bus);
-        }
-
-        contenedorCasillas.appendChild(casilla);
-      }
-    }
 
     function iniciarTemporizador() {
       intervalo = setInterval(() => {
@@ -511,8 +478,6 @@
 
       if (respuesta === respuestaCorrecta) {
         boton.classList.add("correcta");
-        posicionBus = Math.min(posicionBus + 1, totalCasillas);
-        crearRuta();
 
         mensaje.className = "mensaje exito";
         mensaje.innerHTML = `
@@ -523,8 +488,6 @@
       } else {
         boton.classList.add("incorrecta");
         marcarCorrecta();
-        posicionBus = Math.max(posicionBus - 1, 1);
-        crearRuta();
 
         mensaje.className = "mensaje error";
         mensaje.innerHTML = `
@@ -543,9 +506,6 @@
       clearInterval(intervalo);
       bloquearOpciones();
       marcarCorrecta();
-
-      posicionBus = Math.max(posicionBus - 1, 1);
-      crearRuta();
 
       mensaje.className = "mensaje error";
       mensaje.innerHTML = `
@@ -574,7 +534,6 @@
 
     function reiniciarJuego() {
       tiempo = tiempoInicial;
-      posicionBus = 4;
       juegoTerminado = false;
 
       tiempoTexto.textContent = tiempo;
@@ -590,12 +549,10 @@
         opcion.classList.remove("correcta", "incorrecta");
       });
 
-      crearRuta();
       clearInterval(intervalo);
       iniciarTemporizador();
     }
 
-    crearRuta();
     iniciarTemporizador();
   </script>
 </body>
