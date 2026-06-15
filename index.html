@@ -1,11 +1,602 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Invitación</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reto 8 - Paseo Escolar</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #fff4b8, transparent 35%),
+        radial-gradient(circle at bottom right, #d9f3ff, transparent 35%),
+        linear-gradient(135deg, #fff7d6, #dff6ff, #ffe6f3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .decoracion {
+      position: fixed;
+      font-size: 42px;
+      opacity: 0.36;
+      animation: flotar 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .d1 { top: 8%; left: 8%; }
+    .d2 { top: 13%; right: 10%; animation-delay: 1s; }
+    .d3 { bottom: 12%; left: 9%; animation-delay: 2s; }
+    .d4 { bottom: 10%; right: 12%; animation-delay: 1.5s; }
+    .d5 { top: 50%; left: 4%; animation-delay: .7s; }
+    .d6 { top: 48%; right: 5%; animation-delay: 2.3s; }
+
+    @keyframes flotar {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-16px) rotate(8deg); }
+    }
+
+    .tarjeta {
+      width: 100%;
+      max-width: 900px;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 35px;
+      padding: 35px 28px;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(60, 120, 160, 0.25);
+      border: 5px solid rgba(255, 255, 255, 0.9);
+      animation: aparecer 0.8s ease;
+    }
+
+    @keyframes aparecer {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .etiqueta {
+      display: inline-block;
+      background: linear-gradient(135deg, #42c6ff, #ffb347);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0 5px 0 #2f8fc2;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      color: #2495db;
+      font-size: clamp(32px, 6vw, 55px);
+      margin-bottom: 10px;
+      text-shadow: 3px 3px 0 #dff6ff;
+    }
+
+    .subtitulo {
+      color: #7a4d1b;
+      font-size: clamp(18px, 3vw, 26px);
+      font-weight: bold;
+      margin-bottom: 22px;
+    }
+
+    .temporizador {
+      width: 125px;
+      height: 125px;
+      margin: 10px auto 25px;
+      border-radius: 50%;
+      background: conic-gradient(#42c6ff 360deg, #eeeeee 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 0 #2f8fc2;
+      transition: background 0.3s;
+    }
+
+    .tiempo-caja {
+      width: 96px;
+      height: 96px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #2495db;
+      font-weight: bold;
+    }
+
+    .tiempo-numero {
+      font-size: 35px;
+      line-height: 1;
+    }
+
+    .tiempo-texto {
+      font-size: 13px;
+    }
+
+    .pregunta {
+      background: linear-gradient(135deg, #eaf8ff, #fff8dc);
+      border: 3px dashed #42c6ff;
+      border-radius: 25px;
+      padding: 28px;
+      margin: 25px 0;
+      color: #333;
+      font-size: clamp(22px, 4vw, 32px);
+      line-height: 1.4;
+      font-weight: bold;
+    }
+
+    .operacion-grande {
+      margin-top: 18px;
+      display: inline-block;
+      background: #fff7d6;
+      border: 3px solid #ffd15c;
+      color: #5b3d00;
+      padding: 16px 28px;
+      border-radius: 24px;
+      font-size: clamp(34px, 7vw, 58px);
+      box-shadow: 0 6px 0 #e7b83e;
+    }
+
+    .datos {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin: 22px 0;
+    }
+
+    .dato {
+      background: #eaf8ff;
+      border: 3px solid #8ddcff;
+      color: #285b75;
+      border-radius: 18px;
+      padding: 13px 18px;
+      font-size: 20px;
+      font-weight: bold;
+      box-shadow: 0 5px 0 #65b8df;
+    }
+
+    .ruta {
+      margin: 25px auto;
+      background: #f7fbff;
+      border: 4px solid #b7e7ff;
+      border-radius: 28px;
+      padding: 24px;
+      max-width: 760px;
+    }
+
+    .letrero {
+      width: 80%;
+      margin: 0 auto 22px;
+      background: linear-gradient(135deg, #42c6ff, #ffb347);
+      color: white;
+      padding: 12px;
+      border-radius: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 5px 0 #2f8fc2;
+    }
+
+    .casillas {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .casilla {
+      min-height: 70px;
+      background: linear-gradient(135deg, #ffffff, #eaf8ff);
+      border: 3px solid #9bdcff;
+      border-radius: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #37627a;
+      position: relative;
+      box-shadow: 0 5px 0 #b7dff2;
+    }
+
+    .casilla.inicio {
+      background: linear-gradient(135deg, #fff7d6, #ffe79c);
+      border-color: #ffd15c;
+    }
+
+    .casilla.meta {
+      background: linear-gradient(135deg, #d9ffe0, #90f3a3);
+      border-color: #48d865;
+    }
+
+    .bus {
+      position: absolute;
+      font-size: 36px;
+      animation: saltar 0.8s ease infinite alternate;
+    }
+
+    @keyframes saltar {
+      from { transform: translateY(0); }
+      to { transform: translateY(-6px); }
+    }
+
+    .opciones {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(120px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .opcion {
+      border: none;
+      background: linear-gradient(135deg, #55c7ff, #2c98dd);
+      color: white;
+      padding: 18px;
+      border-radius: 22px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 7px 0 #176fa6;
+      transition: 0.2s;
+    }
+
+    .opcion:hover {
+      transform: scale(1.04);
+    }
+
+    .opcion:active {
+      transform: translateY(5px);
+      box-shadow: 0 2px 0 #176fa6;
+    }
+
+    .opcion.correcta {
+      background: linear-gradient(135deg, #70e887, #28c76f);
+      box-shadow: 0 7px 0 #1c9850;
+    }
+
+    .opcion.incorrecta {
+      background: linear-gradient(135deg, #ff8080, #ff4d6d);
+      box-shadow: 0 7px 0 #c12e43;
+    }
+
+    .opcion:disabled {
+      cursor: not-allowed;
+      opacity: 0.85;
+    }
+
+    .mensaje {
+      margin-top: 25px;
+      padding: 24px;
+      border-radius: 25px;
+      font-size: clamp(21px, 4vw, 31px);
+      font-weight: bold;
+      display: none;
+      animation: mensajeAparece 0.6s ease;
+    }
+
+    .mensaje.exito {
+      display: block;
+      background: linear-gradient(135deg, #7ee8a4, #28c76f);
+      color: white;
+      box-shadow: 0 8px 0 #1c9850;
+    }
+
+    .mensaje.error {
+      display: block;
+      background: linear-gradient(135deg, #ff9898, #ff5c7a);
+      color: white;
+      box-shadow: 0 8px 0 #c12e43;
+    }
+
+    @keyframes mensajeAparece {
+      from {
+        transform: scale(0.75) rotate(-3deg);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+      }
+    }
+
+    .movimiento {
+      margin-top: 14px;
+      background: rgba(255,255,255,0.32);
+      padding: 14px;
+      border-radius: 18px;
+      font-size: clamp(22px, 5vw, 36px);
+      font-weight: bold;
+    }
+
+    .resultado {
+      margin-top: 12px;
+      background: rgba(255,255,255,0.28);
+      padding: 12px;
+      border-radius: 18px;
+      font-size: clamp(21px, 4vw, 32px);
+      font-weight: bold;
+    }
+
+    .boton-reiniciar {
+      display: none;
+      margin-top: 22px;
+      border: none;
+      background: linear-gradient(135deg, #ff9ad5, #ffb347);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 30px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #d66d96;
+    }
+
+    .boton-reiniciar.visible {
+      display: inline-block;
+    }
+
+    @media (max-width: 600px) {
+      .tarjeta {
+        padding: 28px 18px;
+      }
+
+      .letrero {
+        width: 100%;
+        font-size: 20px;
+      }
+
+      .casillas {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .casilla {
+        min-height: 60px;
+        font-size: 15px;
+      }
+
+      .opciones {
+        grid-template-columns: 1fr;
+      }
+
+      .opcion {
+        font-size: 25px;
+      }
+
+      .dato {
+        font-size: 17px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Invitación en línea</h1>
-  <p>Esta página está activa correctamente.</p>
+  <div class="decoracion d1">🚌</div>
+  <div class="decoracion d2">🎒</div>
+  <div class="decoracion d3">📚</div>
+  <div class="decoracion d4">⭐</div>
+  <div class="decoracion d5">🎈</div>
+  <div class="decoracion d6">✨</div>
+
+  <main class="tarjeta">
+    <div class="etiqueta">Reto 8 de 8</div>
+
+    <h1>Paseo Escolar</h1>
+
+    <p class="subtitulo">Tienes 30 segundos para responder</p>
+
+    <div class="temporizador" id="temporizador">
+      <div class="tiempo-caja">
+        <div class="tiempo-numero" id="tiempo">30</div>
+        <div class="tiempo-texto">segundos</div>
+      </div>
+    </div>
+
+    <section class="pregunta">
+      Van al paseo <strong>12 cursos</strong> con <strong>25 estudiantes</strong> cada uno.
+      <br><br>
+      ¿Cuántos estudiantes participarán en total?
+      <br>
+      <div class="operacion-grande">12 × 25 = ?</div>
+    </section>
+
+    <div class="datos">
+      <div class="dato">12 cursos</div>
+      <div class="dato">25 estudiantes por curso</div>
+      <div class="dato">¿Total?</div>
+    </div>
+
+    <section class="ruta">
+      <div class="letrero">RUTA DEL PASEO</div>
+      <div class="casillas" id="casillas"></div>
+    </section>
+
+    <section class="opciones">
+      <button class="opcion" onclick="responder(this, 250)">250</button>
+      <button class="opcion" onclick="responder(this, 275)">275</button>
+      <button class="opcion" onclick="responder(this, 300)">300</button>
+      <button class="opcion" onclick="responder(this, 325)">325</button>
+    </section>
+
+    <div class="mensaje" id="mensaje"></div>
+
+    <button class="boton-reiniciar" id="reiniciar" onclick="reiniciarJuego()">
+      Intentar otra vez
+    </button>
+  </main>
+
+  <script>
+    const contenedorCasillas = document.getElementById("casillas");
+    const tiempoTexto = document.getElementById("tiempo");
+    const temporizador = document.getElementById("temporizador");
+    const mensaje = document.getElementById("mensaje");
+    const botonReiniciar = document.getElementById("reiniciar");
+    const opciones = document.querySelectorAll(".opcion");
+
+    const respuestaCorrecta = 300;
+    const tiempoInicial = 30;
+    const totalCasillas = 7;
+
+    let tiempo = tiempoInicial;
+    let posicionBus = 4;
+    let juegoTerminado = false;
+    let intervalo;
+
+    function crearRuta() {
+      contenedorCasillas.innerHTML = "";
+
+      for (let i = 1; i <= totalCasillas; i++) {
+        const casilla = document.createElement("div");
+        casilla.classList.add("casilla");
+
+        if (i === 1) casilla.classList.add("inicio");
+        if (i === totalCasillas) casilla.classList.add("meta");
+
+        casilla.textContent = i;
+
+        if (i === posicionBus) {
+          const bus = document.createElement("div");
+          bus.classList.add("bus");
+          bus.textContent = "🚌";
+          casilla.appendChild(bus);
+        }
+
+        contenedorCasillas.appendChild(casilla);
+      }
+    }
+
+    function iniciarTemporizador() {
+      intervalo = setInterval(() => {
+        if (juegoTerminado) return;
+
+        tiempo--;
+        tiempoTexto.textContent = tiempo;
+
+        const grados = (tiempo / tiempoInicial) * 360;
+
+        if (tiempo <= 8) {
+          temporizador.style.background = `conic-gradient(#ff4d6d ${grados}deg, #eeeeee 0deg)`;
+          tiempoTexto.style.color = "#ff4d6d";
+        } else {
+          temporizador.style.background = `conic-gradient(#42c6ff ${grados}deg, #eeeeee 0deg)`;
+        }
+
+        if (tiempo === 0) {
+          terminarPorTiempo();
+        }
+      }, 1000);
+    }
+
+    function responder(boton, respuesta) {
+      if (juegoTerminado) return;
+
+      juegoTerminado = true;
+      clearInterval(intervalo);
+      bloquearOpciones();
+
+      if (respuesta === respuestaCorrecta) {
+        boton.classList.add("correcta");
+        posicionBus = Math.min(posicionBus + 1, totalCasillas);
+        crearRuta();
+
+        mensaje.className = "mensaje exito";
+        mensaje.innerHTML = `
+          🎉 ¡Correcto!
+          <div class="movimiento">Avanza 1 casilla</div>
+          <div class="resultado">12 × 25 = 300</div>
+        `;
+      } else {
+        boton.classList.add("incorrecta");
+        marcarCorrecta();
+        posicionBus = Math.max(posicionBus - 1, 1);
+        crearRuta();
+
+        mensaje.className = "mensaje error";
+        mensaje.innerHTML = `
+          ❌ Incorrecto.
+          <div class="movimiento">Retrocede 1 casilla</div>
+          <div class="resultado">La respuesta correcta era 300</div>
+          <div class="resultado">12 × 25 = 300</div>
+        `;
+      }
+
+      botonReiniciar.classList.add("visible");
+    }
+
+    function terminarPorTiempo() {
+      juegoTerminado = true;
+      clearInterval(intervalo);
+      bloquearOpciones();
+      marcarCorrecta();
+
+      posicionBus = Math.max(posicionBus - 1, 1);
+      crearRuta();
+
+      mensaje.className = "mensaje error";
+      mensaje.innerHTML = `
+        ⏰ ¡Se acabó el tiempo!
+        <div class="movimiento">Retrocede 1 casilla</div>
+        <div class="resultado">La respuesta correcta era 300</div>
+        <div class="resultado">12 × 25 = 300</div>
+      `;
+
+      botonReiniciar.classList.add("visible");
+    }
+
+    function bloquearOpciones() {
+      opciones.forEach(opcion => {
+        opcion.disabled = true;
+      });
+    }
+
+    function marcarCorrecta() {
+      opciones.forEach(opcion => {
+        if (opcion.textContent.trim() === "300") {
+          opcion.classList.add("correcta");
+        }
+      });
+    }
+
+    function reiniciarJuego() {
+      tiempo = tiempoInicial;
+      posicionBus = 4;
+      juegoTerminado = false;
+
+      tiempoTexto.textContent = tiempo;
+      tiempoTexto.style.color = "#2495db";
+      temporizador.style.background = "conic-gradient(#42c6ff 360deg, #eeeeee 0deg)";
+
+      mensaje.className = "mensaje";
+      mensaje.innerHTML = "";
+      botonReiniciar.classList.remove("visible");
+
+      opciones.forEach(opcion => {
+        opcion.disabled = false;
+        opcion.classList.remove("correcta", "incorrecta");
+      });
+
+      crearRuta();
+      clearInterval(intervalo);
+      iniciarTemporizador();
+    }
+
+    crearRuta();
+    iniciarTemporizador();
+  </script>
 </body>
 </html>
